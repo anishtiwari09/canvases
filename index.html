@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <button onclick="handleClick()">Save</button>
+    <div id="value" style="display:flex;gap:1rem;flex-direction: column;"></div>
+       
+       
+<script>
+    let arr=[]
+    let maxCanvas=1000
+    function renderedImage(){
+        for(let i=0;i<maxCanvas;i++){
+            loadedImage(i)
+       }
+    }
+    function loaded(){
+       for(let i=0;i<maxCanvas;i++){
+        let div=document.createElement('div')
+        div.innerHTML=`<canvas height="900" width="600" id="my-canvas"></canvas>`
+      
+        $("#value").append( `<canvas height="900" width="600" id="my-canvas"></canvas>`)
+       }
+
+      renderedImage()
+    }
+    function loadedImage(i){
+        let image=new Image()
+        image.src="./img.png"
+        let canvas=document.querySelectorAll('canvas')
+      
+       image.onload=function(){
+        canvas.forEach((element,index) => {
+            let item=element
+            if(index==i){
+             
+                let context=item.getContext('2d')
+                context.drawImage(image,0,0,600,900)
+            }
+        });
+       }
+    }
+    function handleClick(){
+        let canvas=document.querySelectorAll('canvas')
+        canvas.forEach((element,index) => {
+           let url=element.toDataURL()
+       
+           var binary = atob(url.split('data:image/png;base64,')[1])
+var array = new Uint8Array(binary.length)
+for( var i = 0; i < binary.length; i++ ) { array[i] = binary.charCodeAt(i) }
+let blob=new Blob([array],{type:"image/png"})
+arr.push(URL.createObjectURL(blob))
+
+        });
+        console.log(arr)
+    }
+    $(document).ready(loaded)
+   
+</script>
+</body>
+</html>
